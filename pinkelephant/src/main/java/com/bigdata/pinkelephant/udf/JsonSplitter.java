@@ -29,31 +29,47 @@ public class JsonSplitter extends EvalFunc<Tuple> {
 			throw new IOException("Got type " + o.getClass().getName() + " expected string");
 		}
 		String line = (String) o;
+		// remove json brackets
+		line = line.replace("{", "").replace("}", "");
 		// Not very defensive or elegant, but it works with our input
 		String[] jsonFields = line.split(",");
 		List<Object> tupleObjects = new ArrayList<Object>();
 		for(Field field : EXPECTED_FIELDS) {
+			boolean found = false;
 			for (String jsonField : jsonFields) {
 				if (jsonField.contains(field.name)) {
 					String[] keyValuePair = jsonField.split(":");
 					if (keyValuePair.length != 2) {
 						throw new IOException("Malformed json line: " + line);
 					} else {
-						tupleObjects.add(keyValuePair[1]);
+						addField(tupleObjects, keyValuePair[1], field.type);
+						found = true;
 						break;
 					}
 				}
 			}
-			// No match, field was not found
-			if (field.required) {
-				throw new IOException(String.format(
-						"Required field %s was not found in line: %s.",
-						field.name, line));
-			} else {
-				tupleObjects.add(field.defaultValue);
+			if (!found) {
+				if (field.required) {
+					throw new IOException(String.format(
+							"hey! Required field %s was not found in line: %s.",
+							field.name, line));
+				} else {
+					addField(tupleObjects, field.defaultValue, field.type);
+				}
 			}
 		}
 		return tupleFactory.newTuple(tupleObjects);
+	}
+	
+	private void addField(List<Object> tupleObjects, String value, byte type) {
+		switch (type) {
+		case DataType.LONG: tupleObjects.add(Long.valueOf(value));
+		break;
+		case DataType.CHARARRAY: tupleObjects.add(value);
+		break;
+		case DataType.INTEGER: tupleObjects.add(Integer.valueOf(value));
+		break;
+		}
 	}
 	
 	public Schema outputSchema(Schema input) {
@@ -65,7 +81,8 @@ public class JsonSplitter extends EvalFunc<Tuple> {
 					fieldSchemas.add(new Schema.FieldSchema(field.name, field.type));
 				}
 				Schema tupleSchema = new Schema(fieldSchemas);
-				outputSchema = new Schema(new Schema.FieldSchema("", tupleSchema, DataType.TUPLE));
+				outputSchema = tupleSchema;
+				//outputSchema = new Schema(new Schema.FieldSchema("vals", tupleSchema, DataType.TUPLE));
 			}
 			return outputSchema;
 		} catch (Exception e) {
