@@ -1,0 +1,28 @@
+REGISTER pk.jar;
+register /home/hadoop/hbase-0.94.6.1/lib/protobuf-java-2.4.0a.jar;
+data = LOAD 'pinkElephantTV/input/boxes.json' USING TextLoader() AS (line:chararray);
+sampledData = sample data 10;
+json = FOREACH sampledData GENERATE (long) com.bigdata.pinkelephant.udf.JsonFieldAccess(line, 'box_id') as box_id, com.bigdata.pinkelephant.udf.JsonFieldAccess(line, 'power', '') as power, com.bigdata.pinkelephant.udf.JsonFieldAccess(line, 'channel', '') as channel,(long) com.bigdata.pinkelephant.udf.JsonFieldAccess(line, 'timestamp') as timestamp;
+
+grouped = group json BY box_id;
+orderedGroup = FOREACH grouped {sorted = ORDER json BY timestamp; GENERATE group, sorted;};
+numeratedOrderedGroup = FOREACH orderedGroup GENERATE com.bigdata.pinkelephant.udf.BagEnumerator(sorted) as json;
+
+f1 = FOREACH numeratedOrderedGroup GENERATE FLATTEN(json);
+f2 = FOREACH numeratedOrderedGroup GENERATE FLATTEN(json);
+joined = JOIN f1 by box_id, f2 by box_id;
+-- rename the fields since they have the same names, and keep only the ones we want
+duration = FOREACH joined GENERATE $0 as box_id, $3 as timestamp, $8 - $3 as duration, $2 as channel, $4 + 1 as order1, $9 as order2;
+filteredDuration = FILTER duration BY order1 == order2 AND channel != '';
+-- project once again...
+projectedDuration = FOREACH filteredDuration GENERATE box_id, duration, channel, timestamp;
+
+totalTime = FOREACH sampledData GENERATE (long) com.bigdata.pinkelephant.udf.JsonFieldAccess(line, 'timestamp') as timestamp;
+groupedTime = group totalTime ALL;
+dif = foreach groupedTime GENERATE MAX(totalTime.timestamp) - MIN(totalTime.timestamp);
+
+customers = LOAD 'hbase://customer' USING org.apache.pig.backend.hadoop.hbase.HBaseStorage('', '-loadKey true') AS (number:long);
+groupedCustomers = group customers ALL;
+numCustomers = foreach groupedCustomers GENERATE COUNT(customers.number);
+
+channel = LOAD 'hbase://channel' USING org.apache.pig.backend.hadoop.hbase.HBaseStorage('info:name', '-loadKey true -limit 5') AS (number:long, name:chararray);
