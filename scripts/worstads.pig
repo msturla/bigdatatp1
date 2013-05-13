@@ -26,4 +26,4 @@ finalCount = FOREACH groupedJoin GENERATE group, COUNT(filteredJoined) as number
 sorted = ORDER finalCount by numberLeft desc;
 top10 = limit sorted 10;
 
-STORE result into 'results/worst_ads' using PigStorage();
+STORE top10 into 'results/worst_ads' using PigStorage();

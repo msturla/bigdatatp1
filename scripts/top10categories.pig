@@ -17,4 +17,4 @@ viewList = FOREACH grouped { box = joined.box_id; distinct_boxes = DISTINCT box;
 sorted = ORDER viewList BY viewers desc;
 top10 = LIMIT sorted 10;
 
-STORE result into 'results/top10categories' using PigStorage();
+STORE top10 into 'results/top10categories' using PigStorage();

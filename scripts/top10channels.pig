@@ -15,5 +15,5 @@ projectedJoin = FOREACH join GENERATE name, viewers;
 sorted = ORDER projectedJoined BY viewers desc;
 top10 = LIMIT sorted 10;
 
-STORE result into 'results/top10channels' using PigStorage();
+STORE top10 into 'results/top10channels' using PigStorage();
 

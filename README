@@ -26,7 +26,7 @@ Results of the scripts will be uploaded to hadoop fs, in /user/hadoop/results
 
 At the time of writing, you can download the zip by using:
 
-wget https://dl.dropboxusercontent.com/u/64978912/bigdatatp1.zip
+https://dl.dropboxusercontent.com/u/64978912/bigdatatp1.zip
 
 and then:
 

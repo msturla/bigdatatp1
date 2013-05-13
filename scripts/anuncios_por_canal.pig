@@ -8,4 +8,4 @@ ads = FILTER day_parts by type=='ads';
 ads_by_channel = GROUP ads BY channel_number;
 ads_per_channel = FOREACH ads_by_channel GENERATE group, COUNT(ads.channel_number);
 
-STORE result into 'results/ads_per_channel' using PigStorage();
+STORE ads_per_channel into 'results/ads_per_channel' using PigStorage();
