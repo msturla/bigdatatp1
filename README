@@ -1,0 +1,20 @@
+bigdatatp1
+==========
+
+This directory must be copied to a datanode.
+
+Once that is done, use:
+
+./setup.sh
+
+to setup scripts. You can now run any script with pig (pig $filename) 
+with any file in the scripts folder.
+
+You can also invoke
+
+./run_scripts.sh
+
+to run all scripts sequentially.
+
+Results of the scripts will be uploaded to hadoop fs, in /user/hadoop/results
+

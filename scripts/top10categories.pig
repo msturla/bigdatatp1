@@ -2,7 +2,7 @@ REGISTER pk.jar;
 register /home/hadoop/hbase-0.94.6.1/lib/protobuf-java-2.4.0a.jar;
 data = LOAD 'pinkElephantTV/input/boxes.json' USING TextLoader() AS (line:chararray);
 channel = LOAD 'hbase://channel' USING org.apache.pig.backend.hadoop.hbase.HBaseStorage('info:categories', '-loadKey true') AS (number:long, categories:chararray);
-channel_categories = FOREACH channel GENERATE number, FLATTEN(TOKENIZE(categories)) as category:chararray;
+channel_categories = FOREACH channel GENERATE number, FLATTEN(TOKENIZE(REPLACE(categories,' ','_'))) as category:chararray;
 
 tupledJson = FOREACH data GENERATE com.bigdata.pinkelephant.udf.JsonSplitter(line) as t;
 flatJson = FOREACH tupledJson GENERATE FLATTEN(t);
@@ -17,12 +17,4 @@ viewList = FOREACH grouped { box = joined.box_id; distinct_boxes = DISTINCT box;
 sorted = ORDER viewList BY viewers desc;
 top10 = LIMIT sorted 10;
 
-
-resultado:
-
-(PPV,82)
-(Adultos,59)
-(Cine,36)
-(General,35)
-(Interes,35)
-(Nacional,35)
+STORE result into 'results/top10categories' using PigStorage();

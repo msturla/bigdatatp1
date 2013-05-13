@@ -1,9 +1,3 @@
-export HBASE_HOME=/home/hadoop/hbase-0.94.6.1
-export HBASE_CONF_DIR=/home/hadoop/hbase-0.94.6.1/conf
-export PIG_CLASSPATH=”`${HBASE_HOME}/bin/hbase classpath`:$PIG_CLASSPATH”
-
-pig
-
 register /home/hadoop/hbase-0.94.6.1/lib/protobuf-java-2.4.0a.jar;
 REGISTER pk.jar;
 
@@ -13,4 +7,5 @@ day_parts = LOAD 'hbase://day_parts' USING org.apache.pig.backend.hadoop.hbase.H
 ads = FILTER day_parts by type=='ads';
 ads_by_channel = GROUP ads BY channel_number;
 ads_per_channel = FOREACH ads_by_channel GENERATE group, COUNT(ads.channel_number);
-dump ads_per_channel;
+
+STORE result into 'results/ads_per_channel' using PigStorage();

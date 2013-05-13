@@ -1,7 +1,0 @@
-REGISTER pk.jar;
-data = LOAD 'pinkElephantTV/input/boxes.json' USING TextLoader() AS (line:chararray);
-sampledData = sample data 100;
-tupledJson = FOREACH sampledData GENERATE com.bigdata.pinkelephant.udf.JsonSplitter(line) as t;
-flatJson = FOREACH test GENERATE FLATTEN(t);
-filtered = FILTER flatJson by box_id == 23;
-dump filtered;

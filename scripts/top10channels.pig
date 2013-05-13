@@ -11,20 +11,9 @@ grouped = group channelLess BY channel;
 viewList = FOREACH grouped { box = channelLess.box_id; distinct_boxes = DISTINCT box; GENERATE (int)group as number, COUNT(distinct_boxes) as viewers;}
 
 joined = JOIN viewList by number, channel by number;
-sorted = ORDER joined BY viewers desc;
+projectedJoin = FOREACH join GENERATE name, viewers;
+sorted = ORDER projectedJoined BY viewers desc;
 top10 = LIMIT sorted 10;
 
-
-RESULTADO (el id de cada canal parece estar repetido!)
-
-(4,50,4,Cronica TV)
-(84,49,84,TCM)
-(62,47,62,Moviecity Mundo)
-(190,46,190,HBO HD)
-(73,46,73,I.Sat)
-(72,46,72,TNT)
-(82,45,82,Europa Europa)
-(117,45,117,Señal Maria)
-(177,45,177,Nat Geo HD)
-(99,45,99,Cine PPV 9)
+STORE result into 'results/top10channels' using PigStorage();
 
