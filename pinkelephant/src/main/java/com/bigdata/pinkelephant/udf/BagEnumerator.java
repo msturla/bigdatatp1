@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.pig.EvalFunc;
-import org.apache.pig.PigException;
-import org.apache.pig.backend.executionengine.ExecException;
 import org.apache.pig.data.BagFactory;
 import org.apache.pig.data.DataBag;
 import org.apache.pig.data.DataType;
@@ -23,19 +21,15 @@ public class BagEnumerator extends EvalFunc<DataBag> {
 	        Iterator<Tuple> it = bag.iterator();
 	        long n = 0;
 	        while (it.hasNext()) {
-	            Tuple t = (Tuple)it.next();
-	            if (t != null && t.size() > 0 && t.get(0) != null) {
+	            Tuple t = it.next();
+	            if (t != null) {
 	                t.append(n++);
 	            }
 	            newBag.add(t);
 	        }
 	        return newBag;
-	    } catch (ExecException ee) {
-	        throw ee;
 	    } catch (Exception e) {
-	        int errCode = 2106;
-	        String msg = "Error while computing item number in " + this.getClass().getSimpleName();
-	        throw new ExecException(msg, errCode, PigException.BUG, e);           
+	        throw new RuntimeException(e);         
 	    }
 	}
 	

@@ -12,7 +12,7 @@ viewList = FOREACH grouped { box = channelLess.box_id; distinct_boxes = DISTINCT
 
 joined = JOIN viewList by number, channel by number;
 projectedJoin = FOREACH joined GENERATE name, viewers;
-sorted = ORDER projectedJoined BY viewers desc;
+sorted = ORDER projectedJoin BY viewers desc;
 top10 = LIMIT sorted 10;
 
 STORE top10 into 'results/top10channels' using PigStorage();
