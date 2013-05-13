@@ -1,5 +1,5 @@
 register /home/hadoop/hbase-0.94.6.1/lib/protobuf-java-2.4.0a.jar;
-REGISTER pk.jar;
+REGISTER /home/hadoop/bigdatatp1/pk.jar;
 
 day_parts = LOAD 'hbase://day_parts' USING org.apache.pig.backend.hadoop.hbase.HBaseStorage('info:start_timestamp info:end_timestamp info:channel_number info:title info:type info:categories info:description', '-loadKey true') AS ( row:long, start_timestamp:long, end_timestamp:long, channel_number:long, title:chararray, type:chararray, categories:chararray, description:chararray);
 

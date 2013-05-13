@@ -1,4 +1,4 @@
-REGISTER pk.jar;
+REGISTER /home/hadoop/bigdatatp1/pk.jar;
 register /home/hadoop/hbase-0.94.6.1/lib/protobuf-java-2.4.0a.jar;
 data = LOAD 'pinkElephantTV/input/boxes.json' USING TextLoader() AS (line:chararray);
 json = FOREACH data GENERATE (long) com.bigdata.pinkelephant.udf.JsonFieldAccess(line, 'box_id') as box_id, com.bigdata.pinkelephant.udf.JsonFieldAccess(line, 'power', '') as power, com.bigdata.pinkelephant.udf.JsonFieldAccess(line, 'channel', '') as channel,(long) com.bigdata.pinkelephant.udf.JsonFieldAccess(line, 'timestamp') as timestamp;

@@ -12,9 +12,22 @@ with any file in the scripts folder.
 
 You can also invoke
 
-./run_scripts.sh
+./run_all.sh
 
-to run all scripts sequentially.
+to run all scripts sequentially. You may have to give execution permission to these files.
+
+Also
+
+./run_script.sh filename
+
+will run an individual script.
 
 Results of the scripts will be uploaded to hadoop fs, in /user/hadoop/results
 
+At the time of writing, you can download the zip by using:
+
+wget https://dl.dropboxusercontent.com/u/64978912/bigdatatp1.zip
+
+and then:
+
+unzip bigdatatp1.zip

@@ -1,4 +1,4 @@
-REGISTER pk.jar;
+REGISTER /home/hadoop/bigdatatp1/pk.jar;
 register /home/hadoop/hbase-0.94.6.1/lib/protobuf-java-2.4.0a.jar;
 REGISTER pig-0.11.1/contrib/piggybank/java/piggybank.jar;
 
