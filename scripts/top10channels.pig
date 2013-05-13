@@ -11,7 +11,7 @@ grouped = group channelLess BY channel;
 viewList = FOREACH grouped { box = channelLess.box_id; distinct_boxes = DISTINCT box; GENERATE (int)group as number, COUNT(distinct_boxes) as viewers;}
 
 joined = JOIN viewList by number, channel by number;
-projectedJoin = FOREACH join GENERATE name, viewers;
+projectedJoin = FOREACH joined GENERATE name, viewers;
 sorted = ORDER projectedJoined BY viewers desc;
 top10 = LIMIT sorted 10;
 

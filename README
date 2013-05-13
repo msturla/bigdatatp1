@@ -7,8 +7,6 @@ Once that is done, use:
 
 ./setup.sh
 
-to setup scripts. You can now run any script with pig (pig $filename) 
-with any file in the scripts folder.
 
 You can also invoke
 
@@ -20,7 +18,13 @@ Also
 
 ./run_script.sh filename
 
-will run an individual script.
+will run an individual script. If you want to run scripts with pig yourself, you must set:
+
+export HBASE_HOME=/home/hadoop/hbase-0.94.6.1
+export HBASE_CONF_DIR=/home/hadoop/hbase-0.94.6.1/conf
+export PIG_CLASSPATH=”`${HBASE_HOME}/bin/hbase classpath`:$PIG_CLASSPATH”
+
+manually. This cannot be done from a script since it has no access to the parent shell caller.
 
 Results of the scripts will be uploaded to hadoop fs, in /user/hadoop/results
 

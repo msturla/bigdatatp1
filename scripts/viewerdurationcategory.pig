@@ -1,6 +1,6 @@
 REGISTER /home/hadoop/bigdatatp1/pk.jar;
 register /home/hadoop/hbase-0.94.6.1/lib/protobuf-java-2.4.0a.jar;
-REGISTER pig-0.11.1/contrib/piggybank/java/piggybank.jar;
+REGISTER /home/hadoop/pig-0.11.1/contrib/piggybank/java/piggybank.jar;
 
 DEFINE UnixToISO org.apache.pig.piggybank.evaluation.datetime.convert.UnixToISO();
 DEFINE JsonFieldAccess com.bigdata.pinkelephant.udf.JsonFieldAccess();
