@@ -15,7 +15,7 @@ joined = JOIN f1 by box_id, f2 by box_id;
 programs = LOAD 'hbase://day_parts' USING org.apache.pig.backend.hadoop.hbase.HBaseStorage('info:start_timestamp, info:end_timestamp, info:type, info:channel_number, info:title', '') AS (start_timestamp:long, end_timestamp:long, type:chararray, channel_number:int, title:chararray);
 ads = filter programs BY type == 'ads';
 
-channelLeavetime = FOREACH joined GENERATE $0 as box_id, $8 as timestamp, $2 as channel, $4 + 1 as order1, $9 as order2;
+channelLeavetime = FOREACH joined GENERATE $0 as box_id, $8 * 1000 as timestamp, $2 as channel, $4 + 1 as order1, $9 as order2;
 filteredChannelLeaveTime = FILTER channelLeavetime BY order1 == order2 AND channel != '';
 projectedChannelLeaveTime = FOREACH filteredChannelLeaveTime GENERATE box_id, (int) channel as fromChannel, timestamp;
 newJoined = join projectedChannelLeaveTime by fromChannel, programs by channel_number;
