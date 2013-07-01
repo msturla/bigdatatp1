@@ -1,4 +1,4 @@
-REGISTER pk.jar;
+REGISTER /home/hadoop/bigdatatp1/pk.jar;
 register /home/hadoop/hbase-0.94.6.1/lib/protobuf-java-2.4.0a.jar;
 data = LOAD 'pinkElephantTV/input/boxes.json' USING TextLoader() AS (line:chararray);
 customer = LOAD 'hbase://customer' USING org.apache.pig.backend.hadoop.hbase.HBaseStorage('info:family_group', '-loadKey true') AS (number:long, family_group:chararray);
