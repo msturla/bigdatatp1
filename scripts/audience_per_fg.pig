@@ -11,4 +11,4 @@ joined = JOIN audience by box_id, customer by number;
 grouped = group joined BY family_group;
 
 result = FOREACH grouped {box = joined.box_id; distinct_boxes = DISTINCT box; GENERATE group as family_group, COUNT(distinct_boxes) as audience_quant;}
-STORE top10 into 'results/audience_per_fg' using PigStorage();
+STORE result into 'results/audience_per_fg' using PigStorage();
