@@ -22,7 +22,7 @@ will run an individual script. If you want to run scripts with pig yourself, you
 
 export HBASE_HOME=/home/hadoop/hbase-0.94.6.1
 export HBASE_CONF_DIR=/home/hadoop/hbase-0.94.6.1/conf
-export PIG_CLASSPATH=”`${HBASE_HOME}/bin/hbase classpath`:$PIG_CLASSPATH”
+export PIG_CLASSPATH=ï¿½`${HBASE_HOME}/bin/hbase classpath`:$PIG_CLASSPATHï¿½
 
 manually. This cannot be done from a script since it has no access to the parent shell caller.
 
